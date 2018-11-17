@@ -13,10 +13,6 @@ class App extends React.Component {
           </h1>
         </header>
         <Calc/>
-        <div>
-          100円単位でポイントが付くクレジットカードを使用している場合、
-          Kyashにいくら送金キャンセル手動チャージすると端数がなくなるか計算するアプリ
-        </div>
       </div>
     );
   }
