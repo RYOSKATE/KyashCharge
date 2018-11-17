@@ -1,0 +1,47 @@
+{
+  "name": "kyash-charge",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "ts-lint": "tslint --fix --project ./ 'src/**/*.tsx'",
+    "start": "cross-env NODE_ENV=preview webpack-serve --config webpack.config.preview.js",
+    "build": "cross-env NODE_ENV=dev webpack --config webpack.config.dev.js",
+    "build:prod": "cross-env NODE_ENV=prod webpack --config webpack.config.prod.js",
+    "test": "jest",
+    "precommit": "yarn-deduplicate yarn.lock && yarn install && yarn build:prod",
+    "postcommit": "git update-index --again"
+  },
+  "pre-commit": "precommit",
+  "post-commit": "postcommit",
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "react": "^16.6.1",
+    "react-dom": "^16.6.1"
+  },
+  "devDependencies": {
+    "@types/react": "^16.7.3",
+    "@types/react-bootstrap": "^0.32.14",
+    "@types/react-dom": "^16.0.9",
+    "cache-loader": "^1.2.5",
+    "cross-env": "^5.2.0",
+    "css-loader": "^1.0.1",
+    "happypack": "^5.0.0",
+    "html-webpack-plugin": "^3.2.0",
+    "post-commit": "^0.0.1",
+    "pre-commit": "^1.2.2",
+    "style-loader": "^0.23.1",
+    "thread-loader": "^1.2.0",
+    "ts-loader": "^5.3.0",
+    "tslint": "^5.11.0",
+    "tslint-config-prettier": "^1.16.0",
+    "tslint-loader": "^3.5.4",
+    "tslint-react": "^3.6.0",
+    "typescript": "^3.1.6",
+    "webpack": "^4.25.1",
+    "webpack-cli": "^3.1.2",
+    "webpack-merge": "^4.1.4",
+    "webpack-serve": "^2.0.2"
+  }
+}

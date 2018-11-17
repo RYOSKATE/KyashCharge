@@ -1,0 +1,22 @@
+#root{
+  font-size: 20px;
+  font-weight: bold;
+}
+#root div{
+  padding: 10px;
+}
+#root p{
+  display:inline;
+  padding: 20px;
+}
+.show{
+  display:block;
+}
+input{
+  text-align:right;
+  padding:6px; 
+}
+.result{
+  width: 350px;
+  margin: 0 auto;
+}
