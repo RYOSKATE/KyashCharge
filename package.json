@@ -9,7 +9,7 @@
     "build": "cross-env NODE_ENV=dev webpack --config webpack.config.dev.js",
     "build:prod": "cross-env NODE_ENV=prod webpack --config webpack.config.prod.js",
     "test": "jest",
-    "precommit": "yarn-deduplicate yarn.lock && yarn install && yarn build:prod",
+    "precommit": "yarn-deduplicate yarn.lock && yarn install && yarn build:prod && git add docs",
     "postcommit": "git update-index --again"
   },
   "pre-commit": "precommit",
