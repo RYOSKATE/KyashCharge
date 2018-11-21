@@ -7,7 +7,7 @@ import './css/App.css';
 class App extends React.Component {
     public render() {
       return (
-        <Grid fluid={true} className="App">
+        <Grid className="App">
           <Row>
           <Col lg={12} md={12} sm={12} xs={12}>
             <Header className="App-header">
