@@ -1,6 +1,6 @@
 const path = require('path');                             // 絶対パスに変換するために
 const htmlWebpackPlugin = require('html-webpack-plugin'); // index.htmlをビルドチェインの中で作っちゃう
-
+const webpack = require('webpack');
 const isProduction = process.env.NODE_ENV === 'prod';
 
 module.exports = {
@@ -53,6 +53,10 @@ module.exports = {
                     'css-loader',//cssをjsにバンドルする
                 ],
             },
+            {
+                test: /\.(woff|woff2|eot|ttf|svg)$/,
+                loader: 'file-loader?name=../font/[name].[ext]'
+            }
         ]
     },
     resolve: {
@@ -65,6 +69,10 @@ module.exports = {
     plugins: [
         new htmlWebpackPlugin({
             template: "src/index.html"    // 同じ階層にあるindex.htmlを元に、デプロイ用のindex.htmlを作って出力ディレクトリに配置してくれる
+        }),
+        new webpack.ProvidePlugin({
+            $: "jquery",
+            jQuery: "jquery"
         })
     ]
 };

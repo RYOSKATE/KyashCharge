@@ -1,8 +1,9 @@
 import * as React from 'react';
+import { ControlLabel, DropdownButton, FormControl, FormGroup, InputGroup, InputGroupAddon, MenuItem, Panel, SelectCallback } from 'react-bootstrap';
 
 interface IStates {
-    targetNoTax: number;
-    target: number;
+    isTax: boolean;
+    price: number;
     balance: number;
     toCharge: number;
     amount: number;
@@ -10,13 +11,14 @@ interface IStates {
 class Calc extends React.Component<{}, IStates> {
     constructor (props:any) {
         super(props);
-        this.state = { targetNoTax:0, target:0, balance:0, toCharge:0, amount:0 };
+        this.state = { isTax:true, price:0, balance:0, toCharge:0, amount:0 };
 
+        this.setTax = this.setTax.bind(this);
+        this.setNoTax = this.setNoTax.bind(this);
+        this.changePrice = this.changePrice.bind(this);
+        this.changeBalance = this.changeBalance.bind(this);
         this.calcToCharge = this.calcToCharge.bind(this);
         this.leaveOnlyNumber = this.leaveOnlyNumber.bind(this);
-        this.changeTargetNoTax = this.changeTargetNoTax.bind(this);
-        this.changeTarget = this.changeTarget.bind(this);
-        this.changeBalance = this.changeBalance.bind(this);
     }
 
     public leaveOnlyNumber(num: number):number {
@@ -34,56 +36,74 @@ class Calc extends React.Component<{}, IStates> {
         }
         return Number(arr.join(''));
     }
-
-    public changeTargetNoTax(event:React.ChangeEvent<HTMLInputElement>) {
-        this.setState({
-            target: this.leaveOnlyNumber(1.08 * Number(event.target.value)),
-            targetNoTax: this.leaveOnlyNumber(Number(event.target.value)),
-        });
+    public setTax(eventKey: any, e?: React.SyntheticEvent<{}>) {
+        const toCharge = this.calcToCharge(true, this.state.price, this.state.balance);
+        this.setState({isTax:true, toCharge});
     }
-    public changeTarget(event:React.ChangeEvent<HTMLInputElement>) {
-        this.setState({
-            target: this.leaveOnlyNumber(Number(event.target.value)),
-            targetNoTax: this.leaveOnlyNumber(Number(event.target.value) / 1.08),
-        });
+    public setNoTax(eventKey: any, e?: React.SyntheticEvent<{}>) {
+        const toCharge = this.calcToCharge(false, this.state.price, this.state.balance);
+        this.setState({isTax:false, toCharge});
     }
-    public changeBalance(event:React.ChangeEvent<HTMLInputElement>) {
-        const balance = this.leaveOnlyNumber(Number(event.target.value));
-        const toCharge = this.calcToCharge(balance);
+    public changePrice(event: React.FormEvent<FormControl>){
+        const input = event.target as HTMLInputElement;
+        const value = Number(input.value);
+        const price:number = this.leaveOnlyNumber(value);
+        const toCharge = this.calcToCharge(this.state.isTax, price, this.state.balance);
+        this.setState({price, toCharge});
+    }
+    public changeBalance(event: React.FormEvent<FormControl>) {
+        const input = event.target as HTMLInputElement;
+        const value = Number(input.value);
+        const balance = this.leaveOnlyNumber(value);
+        const toCharge = this.calcToCharge(this.state.isTax, this.state.price, balance);
         this.setState({ balance, toCharge });
     }
-    public calcToCharge(balance: number) {
+    public calcToCharge(isTax:boolean, rawPrice:number, balance: number) {
+        const price = isTax ? rawPrice : 1.08 * rawPrice;
         let toCharge = 0;
-        while (balance + toCharge < this.state.target) {
+        while (balance + toCharge < price) {
             toCharge += 100;
         }
         return toCharge;
     }
+
     public render() {
         return (
-            <p className="App-intro">
-                <div>
-                    <p>税抜</p>
-                    {this.state.targetNoTax <= 0 ?
-                    <input type="number" placeholder="0"  onChange={this.changeTargetNoTax} /> :
-                    <input type="number" value={`${this.state.targetNoTax}`}  onChange={this.changeTargetNoTax} />} 円
-                </div>
-                <div>
-                    <p>税込</p>
-                    {this.state.target <= 0 ?
-                    <input type="number" placeholder="0"  onChange={this.changeTarget} /> :
-                    <input type="number" value={`${this.state.target}`}  onChange={this.changeTarget} />} 円
-                </div>
-                <div>
-                    <p>残高</p>
-                    {this.state.balance <= 0 ?
-                    <input type="number" placeholder="0"  onChange={this.changeBalance} /> :
-                    <input type="number" value={`${this.state.balance}`}  onChange={this.changeBalance} />} 円
-                </div>
-                <div>
-                    送金は<strong>{this.leaveOnlyNumber(this.state.balance + this.state.toCharge)}</strong>円({this.state.toCharge}円のチャージ)
-                </div>
-            </p>
+            <form className="App-intro">
+                <FormGroup>
+                    <InputGroup>
+                        <InputGroup.Addon>価格</InputGroup.Addon>
+                        <DropdownButton
+                            componentClass={InputGroup.Button}
+                            id="input-dropdown-addon"
+                            title={this.state.isTax?"税込":"税抜"}>
+                            <MenuItem key="1" onSelect={this.setTax}>税込</MenuItem>
+                            <MenuItem key="2" onSelect={this.setNoTax}>税抜</MenuItem>
+                        </DropdownButton>                        
+                        {this.state.price <= 0 ?
+                        <FormControl type="number" onChange={this.changePrice} placeholder="0"  /> :
+                        <FormControl type="number" onChange={this.changePrice} value={`${this.state.price}`} />}            
+                        <InputGroup.Addon>円</InputGroup.Addon>
+                    </InputGroup>
+                </FormGroup>
+                <FormGroup>
+                    <InputGroup>
+                        <InputGroup.Addon>残高</InputGroup.Addon>
+                        {this.state.balance <= 0 ?
+                        <FormControl type="number"　onChange={this.changeBalance} placeholder="0" /> :
+                        <FormControl type="number"　onChange={this.changeBalance} value={`${this.state.balance}`}/>} 
+                        <InputGroup.Addon>円</InputGroup.Addon>
+                    </InputGroup>
+                </FormGroup>
+                <Panel>
+                    <Panel.Body>
+                        送金は<strong>{this.leaveOnlyNumber(this.state.balance + this.state.toCharge)}</strong>円                       
+                    </Panel.Body>
+                    <Panel.Footer>
+                        <small>(チャージされるのは{this.state.toCharge}円)</small>
+                    </Panel.Footer>
+                </Panel>
+            </form>
         );
     }
 }
