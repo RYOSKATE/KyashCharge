@@ -68,6 +68,7 @@ class Calc extends React.Component<{}, IStates> {
     }
 
     public render() {
+        const toSend = this.leaveOnlyNumber(this.state.balance + this.state.toCharge);
         return (
             <form className="App-intro">
                 <FormGroup>
@@ -96,11 +97,14 @@ class Calc extends React.Component<{}, IStates> {
                     </InputGroup>
                 </FormGroup>
                 <Panel>
+                    <Panel.Heading>
+                        <small>(チャージされるのは{this.state.toCharge}円)</small>                    
+                    </Panel.Heading>
                     <Panel.Body>
-                        送金は<strong>{this.leaveOnlyNumber(this.state.balance + this.state.toCharge)}</strong>円                       
+                        送金額: <strong>{toSend}</strong>円                       
                     </Panel.Body>
                     <Panel.Footer>
-                        <small>(チャージされるのは{this.state.toCharge}円)</small>
+                        <small>(残金になるのは{toSend-this.state.price}円)</small>
                     </Panel.Footer>
                 </Panel>
             </form>
