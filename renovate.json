@@ -2,5 +2,5 @@
   "extends": [
     "config:base"
   ],
-  "ignoreDeps": ["bootstrap"]
+  "ignoreDeps": ["bootstrap", "@types/bootstrap"]
 }
