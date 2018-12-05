@@ -26,7 +26,7 @@
   },
   "devDependencies": {
     "@types/bootstrap": "^3.3.40",
-    "@types/jquery": "3.3.22",
+    "@types/jquery": "3.3.23",
     "@types/popper.js": "1.11.0",
     "@types/react": "16.7.13",
     "@types/react-bootstrap": "0.32.15",
@@ -47,7 +47,7 @@
     "tslint-loader": "3.5.4",
     "tslint-react": "3.6.0",
     "typescript": "3.2.1",
-    "webpack": "4.27.0",
+    "webpack": "4.27.1",
     "webpack-cli": "3.1.2",
     "webpack-merge": "4.1.4",
     "webpack-serve": "2.0.3"
